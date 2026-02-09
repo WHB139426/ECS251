@@ -1,6 +1,6 @@
 from concurrent.futures import ThreadPoolExecutor
 from src.interfaces import DataLoader
-import os
+from src import config  # <--- 新增引入
 
 class ThreadDataLoader(DataLoader):
     def process_file(self, filepath):
@@ -12,6 +12,5 @@ class ThreadDataLoader(DataLoader):
         return filepath
 
     def load_and_process(self, files):
-        # We assume 4 workers for now
-        with ThreadPoolExecutor(max_workers=4) as executor:
+        with ThreadPoolExecutor(max_workers=config.NUM_WORKERS) as executor:
             list(executor.map(self.process_file, files))

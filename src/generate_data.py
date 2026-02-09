@@ -1,25 +1,21 @@
 import os
 import random
 from src.utils import logger
-
-DATA_DIR = "./data"
-NUM_FILES = 50
-MIN_SIZE_MB = 1
-MAX_SIZE_MB = 10
+from src import config
 
 def generate_dataset():
-    if not os.path.exists(DATA_DIR):
-        os.makedirs(DATA_DIR)
-        logger.info(f"Created directory: {DATA_DIR}")
+    # 使用 config.DATA_DIR 代替 "./data"
+    if not os.path.exists(config.DATA_DIR):
+        os.makedirs(config.DATA_DIR)
+        logger.info(f"Created directory: {config.DATA_DIR}")
     
-    logger.info(f"Generating {NUM_FILES} files with random sizes ({MIN_SIZE_MB}-{MAX_SIZE_MB}MB)...")
+    logger.info(f"Generating {config.NUM_FILES} files...") # 使用 config 里的数量
     
-    for i in range(NUM_FILES):
-        # Random size for each file
-        size_mb = random.randint(MIN_SIZE_MB, MAX_SIZE_MB)
-        file_path = os.path.join(DATA_DIR, f"file_{i:03d}_{size_mb}MB.bin")
+    for i in range(config.NUM_FILES):
+        # 使用 config 里的范围
+        size_mb = random.randint(config.MIN_FILE_SIZE_MB, config.MAX_FILE_SIZE_MB)
+        file_path = os.path.join(config.DATA_DIR, f"file_{i:03d}_{size_mb}MB.bin")
         
-        # Write random bytes
         with open(file_path, "wb") as f:
             f.write(os.urandom(size_mb * 1024 * 1024))
             

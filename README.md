@@ -20,7 +20,7 @@ ECS251/
     ├── utils.py            # Timing, Logging, and Decorators
     └── loaders/            # Concurrency Implementations
         ├── __init__.py
-        ├── base_loader.py    # Common logic (TBD)
+        ├── sync_loader.py    # Synchronous implementation
         ├── thread_loader.py  # ThreadPool implementation
         ├── process_loader.py # ProcessPool implementation (TBD)
         └── async_loader.py   # AsyncIO implementation (TBD)
@@ -33,6 +33,10 @@ ECS251/
 Ensure you have Python 3.8+ installed. Install the required dependencies:
 
 ```bash
+conda create -n ecs251 python=3.10.11
+conda activate ecs251
+git clone git@github.com:WHB139426/ECS251.git
+cd ECS251
 pip install -r requirements.txt
 ```
 
@@ -49,13 +53,15 @@ python -m src.generate_data
 Currently, the **Synchronous** and **Thread Pool** loaders are implemented as the baseline.
 
 ```bash
+# Run the Synchronous loader
+python -m src.main --mode sync
 # Run the ThreadPool loader
 python -m src.main --mode thread
 ```
 
 *(Note: Full benchmarking suite with Process and Async modes will be available in following weeks).*
 
-## ⚙️ Configuration
+## Configuration
 
 You can adjust the workload characteristics in `src/config.py` to simulate different AI tasks:
 
@@ -66,13 +72,13 @@ You can adjust the workload characteristics in `src/config.py` to simulate diffe
 * **`NUM_WORKERS`**: Number of threads/processes to spawn.
 * **`NUM_FILES`**: Total dataset size.
 
-## 📅 Roadmap & Milestones
+## Roadmap & Milestones
 
 **Current Progress:** 
 * Infrastructure setup & Architecture design.
 * Abstract Interface definition (`DataLoader` class).
 * Data Generation logic.
-* ThreadPool baseline implementation.
+* ThreadPool and Synchronous baseline implementation.
 
 **Next steps:** 
 * Implementation of Multiprocessing (IPC handling).
