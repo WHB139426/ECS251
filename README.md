@@ -1,9 +1,10 @@
-# Comparative Analysis of OS Concurrency Models for AI Data Pipelines
-
+# ECS-251 Project: Comparative Analysis of OS Concurrency Models for AI Data Pipelines 
 ## Project Overview
-This project investigates the performance trade-offs of different **Operating System concurrency primitives**: Threads, Processes, and Asynchronous I/O, in the context of **high-throughput Multimodal AI data loading**.
+This project investigates the performance trade-offs of different Operating System concurrency primitives: Threads, Processes, and Asynchronous I/O, in the context of high-throughput Multimodal AI data loading.
 
-Modern AI training pipelines often suffer from "GPU Starvation" due to inefficient data ingestion. Our goal is to benchmark these concurrency models under varying ratios of **I/O-bound** (disk reading) and **CPU-bound** (data augmentation/decoding) tasks to identify the optimal strategy for Linux-based environments.
+Modern AI training pipelines often suffer from "GPU Starvation" due to inefficient data ingestion. Our goal is to benchmark these concurrency models under varying ratios of I/O-bound (disk reading) and CPU-bound (data augmentation/decoding) tasks to identify the optimal strategy for Linux-based environments.
+
+Group Members: *Haibo Wang; Sihai Yu; Yuankai Li*
 
 ## Project Structure
 The project is designed with a modular architecture to allow easy swapping of concurrency backends.
@@ -30,7 +31,7 @@ ECS251/
 
 ### 1. Prerequisites
 
-Ensure you have Python 3.8+ installed. Install the required dependencies:
+Ensure you have Python 3.10+ installed. Install the required dependencies:
 
 ```bash
 conda create -n ecs251 python=3.10.11
