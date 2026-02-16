@@ -15,7 +15,7 @@ from src.utils import Timer
 # === 实验配置网格 ===
 MATRIX_SIZES = [0, 100, 300, 500]  # 从纯IO到高计算
 WORKER_COUNTS = [1, 2, 4, 8]       # 并发数
-MODES = ['thread', 'process', 'async'] # 要测试的模式
+MODES = ['sync', 'thread', 'process', 'async'] # 要测试的模式
 
 def run_suite():
     print("🚀 Starting Automated Experiment Suite...")
@@ -39,6 +39,11 @@ def run_suite():
             
             for mode in MODES:
                 # 实例化 Loader
+                if mode == 'sync':
+                    # Sync 模式通常不需要 worker 数量，但为了格式统一我们还是传参
+                    # 注意：SyncLoader 内部通常是单线程，会忽略 workers 参数，
+                    # 但在画图时，我们可以把它画成一条横线，或者只看 workers=1 的数据点。
+                    loader = SyncDataLoader(config.DATA_DIR, m_size)
                 if mode == 'thread':
                     loader = ThreadDataLoader(config.DATA_DIR, m_size)
                 elif mode == 'process':
