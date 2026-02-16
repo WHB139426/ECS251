@@ -12,6 +12,7 @@ The project is designed with a modular architecture to allow easy swapping of co
 ECS251/
 ├── README.md               # Project documentation
 ├── requirements.txt        # Python dependencies
+├── run_experiment.py       # Automated benchmarking suite (Iterates all configs)
 ├── data/                   # Generated synthetic data (ignored in git)
 ├── logs/                   # Benchmark results and system logs
 └── src/
@@ -21,10 +22,10 @@ ECS251/
     ├── utils.py            # Timing, Logging, and Decorators
     └── loaders/            # Concurrency Implementations
         ├── __init__.py
-        ├── sync_loader.py    # Synchronous implementation
+        ├── sync_loader.py    # Synchronous implementation (Baseline)
         ├── thread_loader.py  # ThreadPool implementation
-        ├── process_loader.py # ProcessPool implementation (TBD)
-        └── async_loader.py   # AsyncIO implementation (TBD)
+        ├── process_loader.py # ProcessPool implementation (Multiprocessing)
+        └── async_loader.py   # AsyncIO implementation (Coroutines)
 ```
 
 ## Getting Started
@@ -51,16 +52,24 @@ python -m src.generate_data
 
 ### 3. Run the Benchmark (Baseline)
 
-Currently, the **Synchronous** and **Thread Pool** loaders are implemented as the baseline.
+You can run a specific concurrency model manually to verify behavior or debug.
 
 ```bash
-# Run the Synchronous loader
+# 1. Baseline: Synchronous (Single Thread)
 python -m src.main --mode sync
-# Run the ThreadPool loader
+# 2. Multi-Threading (Good for I/O bound)
 python -m src.main --mode thread
+# 3. Multi-Processing (Good for CPU bound)
+python -m src.main --mode process
+# 4. Asynchronous I/O (Best for high concurrency I/O)
+python -m src.main --mode async
 ```
 
-*(Note: Full benchmarking suite with Process and Async modes will be available in following weeks).*
+To collect full experimental data, run the automation script. This will iterate through all combinations of Matrix Sizes (CPU load) and Worker Counts, saving the results to .`experiment_results.csv`
+
+```bash
+python run_experiment.py
+```
 
 ## Configuration
 
@@ -72,20 +81,3 @@ You can adjust the workload characteristics in `src/config.py` to simulate diffe
 * `500+`: CPU-bound (Stress-testing the GIL).
 * **`NUM_WORKERS`**: Number of threads/processes to spawn.
 * **`NUM_FILES`**: Total dataset size.
-
-## Roadmap & Milestones
-
-**Current Progress:** 
-* Infrastructure setup & Architecture design.
-* Abstract Interface definition (`DataLoader` class).
-* Data Generation logic.
-* ThreadPool and Synchronous baseline implementation.
-
-**Next steps:** 
-* Implementation of Multiprocessing (IPC handling).
-* Implementation of AsyncIO (Coroutines & Event Loop).
-* Automated benchmarking suite.
-* Integration with OS metrics (`vmstat`, `pidstat`).
-* Final analysis.
-* Visualization of Throughput vs. Latency.
-* Report generation.

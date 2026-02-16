@@ -10,15 +10,18 @@ logging.basicConfig(
 logger = logging.getLogger("OS_Project")
 
 class Timer:
-    def __init__(self, name):
+    def __init__(self, name, suppress_log=False):
         self.name = name
+        self.suppress_log = suppress_log
     
     def __enter__(self):
         self.start = time.time()
-        logger.info(f"Starting task: {self.name}")
+        if not self.suppress_log:
+            logger.info(f"Starting task: {self.name}")
         return self
 
     def __exit__(self, *args):
         self.end = time.time()
         self.duration = self.end - self.start
-        logger.info(f"Finished {self.name} in {self.duration:.4f} seconds")
+        if not self.suppress_log:
+            logger.info(f"Finished {self.name} in {self.duration:.4f} seconds")
