@@ -13,12 +13,15 @@ ECS251/
 ├── README.md               # Project documentation
 ├── requirements.txt        # Python dependencies
 ├── run_experiment.py       # Automated benchmarking suite (Iterates all configs)
+├── plot_results.py         # Data visualization script
 ├── data/                   # Generated synthetic data (ignored in git)
 ├── logs/                   # Benchmark results and system logs
+│   └── plots/              # Generated performance graphs
 └── src/
     ├── config.py           # Centralized configuration (Matrix size, Workers)
     ├── generate_data.py    # Synthetic dataset generator
     ├── interfaces.py       # Abstract Base Classes (Loader Interface)
+    ├── monitor.py          # OS Resource Monitor (Memory RSS, Context Switches)
     ├── utils.py            # Timing, Logging, and Decorators
     └── loaders/            # Concurrency Implementations
         ├── __init__.py
@@ -31,9 +34,7 @@ ECS251/
 ## Getting Started
 
 ### 1. Prerequisites
-
 Ensure you have Python 3.10+ installed. Install the required dependencies:
-
 ```bash
 conda create -n ecs251 python=3.10.11
 conda activate ecs251
@@ -43,17 +44,13 @@ pip install -r requirements.txt
 ```
 
 ### 2. Generate Synthetic Dataset
-
 Before running benchmarks, generate the mock "video/image" data. This script creates binary files with random sizes (default 1MB - 10MB) in the `data/` directory to simulate variable video frame payloads.
-
 ```bash
 python -m src.generate_data
 ```
 
 ### 3. Run the Benchmark (Baseline)
-
 You can run a specific concurrency model manually to verify behavior or debug.
-
 ```bash
 # 1. Baseline: Synchronous (Single Thread)
 python -m src.main --mode sync
@@ -64,12 +61,18 @@ python -m src.main --mode process
 # 4. Asynchronous I/O (Best for high concurrency I/O)
 python -m src.main --mode async
 ```
-
 To collect full experimental data, run the automation script. This will iterate through all combinations of Matrix Sizes (CPU load) and Worker Counts, saving the results to .`experiment_results.csv`
-
 ```bash
 python run_experiment.py
 ```
+
+### 4. Visualize Results
+
+After generating the `experiment_results.csv`, you can generate the performance graphs (Throughput vs. CPU Load, OS Overhead, etc.) by running:
+```bash
+python plot_results.py
+```
+The plots will be saved in the `logs/plots/` directory.
 
 ## Configuration
 
