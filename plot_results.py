@@ -52,4 +52,23 @@ if 'Context_Switches' in df.columns:
     plt.savefig("logs/plots/context_switches_overhead.png", dpi=300)
     print("Saved logs/plots/context_switches_overhead.png")
 
+# ==========================================
+# 图表 3: 内存开销分析 (Peak Memory)
+# ==========================================
+if 'Peak_Memory_MB' in df.columns:
+    plt.figure(figsize=(8, 5))
+    df_mem = df[df['Matrix_Size'] == 500] # 选高负载场景看内存分配
+    
+    for mode in df_mem['Mode'].unique():
+        subset = df_mem[df_mem['Mode'] == mode]
+        plt.plot(subset['Workers'], subset['Peak_Memory_MB'], marker='^', label=mode.upper(), color=colors.get(mode))
+
+    plt.title('Peak Memory Consumption (High CPU Load)')
+    plt.xlabel('Number of Workers')
+    plt.ylabel('Peak Memory (MB)')
+    plt.legend()
+    plt.grid(True, linestyle='--', alpha=0.7)
+    plt.savefig("logs/plots/peak_memory_overhead.png", dpi=300)
+    print("Saved logs/plots/peak_memory_overhead.png")
+    
 print("✅ Plotting complete!")
