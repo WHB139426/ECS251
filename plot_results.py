@@ -2,22 +2,21 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import os
 
-# 创建图表保存目录
 if not os.path.exists("logs/plots"):
     os.makedirs("logs/plots")
 
 print("📊 Loading experiment_results.csv...")
 df = pd.read_csv("experiment_results.csv")
 
-# 过滤掉 sync 模型在不同 worker 下的重复数据（因为它只用单线程）
+# filter sync under different worker number
 df = df[~((df['Mode'] == 'sync') & (df['Workers'] > 1))]
 
 # 颜色映射，保证图表统一
 colors = {'sync': 'gray', 'thread': 'blue', 'process': 'red', 'async': 'green'}
 
 # ==========================================
-# 图表 1: 吞吐量 vs CPU 负载强度 (Crossover Point)
-# 我们固定 8 个 Workers，看不同负载下谁更强
+# Figure 1: Throughput vs CPU Load Intensity (Crossover Point)
+# Fix 8 Workers
 # ==========================================
 plt.figure(figsize=(8, 5))
 df_8w = df[(df['Workers'] == 8) | (df['Mode'] == 'sync')]
@@ -34,11 +33,11 @@ plt.savefig("logs/plots/throughput_vs_cpuload.png", dpi=300)
 print("Saved logs/plots/throughput_vs_cpuload.png")
 
 # ==========================================
-# 图表 2: 上下文切换代价分析 (Context Switches)
+# Figure 2: OS Context Switches Overhead
 # ==========================================
 if 'Context_Switches' in df.columns:
     plt.figure(figsize=(8, 5))
-    df_io = df[df['Matrix_Size'] == 0] # 选纯IO场景
+    df_io = df[df['Matrix_Size'] == 0] # Pure I/O
     
     for mode in df_io['Mode'].unique():
         subset = df_io[df_io['Mode'] == mode]
@@ -53,11 +52,11 @@ if 'Context_Switches' in df.columns:
     print("Saved logs/plots/context_switches_overhead.png")
 
 # ==========================================
-# 图表 3: 内存开销分析 (Peak Memory)
+# Figure 3: Peak Memory Consumption
 # ==========================================
 if 'Peak_Memory_MB' in df.columns:
     plt.figure(figsize=(8, 5))
-    df_mem = df[df['Matrix_Size'] == 500] # 选高负载场景看内存分配
+    df_mem = df[df['Matrix_Size'] == 500]
     
     for mode in df_mem['Mode'].unique():
         subset = df_mem[df_mem['Mode'] == mode]

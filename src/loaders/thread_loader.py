@@ -1,6 +1,6 @@
 from concurrent.futures import ThreadPoolExecutor
 from src.interfaces import DataLoader
-from src import config  # <--- 新增引入
+from src import config
 
 class ThreadDataLoader(DataLoader):
     def process_file(self, filepath):

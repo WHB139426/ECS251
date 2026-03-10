@@ -12,7 +12,7 @@ from src.loaders.async_loader import AsyncDataLoader
 from src.utils import Timer
 from src.monitor import ResourceMonitor  # <--- 新增导入
 
-# === 实验配置网格 ===
+# === config ===
 MATRIX_SIZES = [0, 100, 300, 500]
 WORKER_COUNTS = [1, 2, 4, 8]
 MODES = ['sync', 'thread', 'process', 'async']
@@ -45,7 +45,6 @@ def run_suite():
                     loader = AsyncDataLoader(config.DATA_DIR, m_size)
                 
                 try:
-                    # [关键改动]：加入 ResourceMonitor 来捕获 OS 级指标
                     with ResourceMonitor() as monitor:
                         with Timer("Exp", suppress_log=True) as t:
                             loader.load_and_process(files)
